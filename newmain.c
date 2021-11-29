@@ -1,0 +1,38 @@
+// PIC16F887 Configuration Bit Settings
+
+// 'C' source line config statements
+
+// CONFIG1
+#pragma config FOSC = INTRC_NOCLKOUT// Oscillator Selection bits (INTOSCIO oscillator: I/O function on RA6/OSC2/CLKOUT pin, I/O function on RA7/OSC1/CLKIN)
+#pragma config WDTE = OFF       // Watchdog Timer Enable bit (WDT disabled and can be enabled by SWDTEN bit of the WDTCON register)
+#pragma config PWRTE = OFF      // Power-up Timer Enable bit (PWRT disabled)
+#pragma config MCLRE = ON       // RE3/MCLR pin function select bit (RE3/MCLR pin function is MCLR)
+#pragma config CP = OFF         // Code Protection bit (Program memory code protection is disabled)
+#pragma config CPD = OFF        // Data Code Protection bit (Data memory code protection is disabled)
+#pragma config BOREN = ON       // Brown Out Reset Selection bits (BOR enabled)
+#pragma config IESO = ON        // Internal External Switchover bit (Internal/External Switchover mode is enabled)
+#pragma config FCMEN = ON       // Fail-Safe Clock Monitor Enabled bit (Fail-Safe Clock Monitor is enabled)
+#pragma config LVP = ON         // Low Voltage Programming Enable bit (RB3/PGM pin has PGM function, low voltage programming enabled)
+
+// CONFIG2
+#define _XTAL_FREQ 4000000
+#include <xc.h>
+
+void __interrupt () my_isr_routine (void)
+{
+    if (PIR1bits.TMR1IF)
+    {
+       
+        TMR0=256-244;
+ PIR1bits.TMR1IF=0;;
+    }
+return;
+}
+
+void main(void) {
+    INTCON      =0b11000000;
+    PIE1        =0b00000001;
+    OPTION_REG  =0b11010111;
+    T1CON       =0b00110001;
+    return;
+}
